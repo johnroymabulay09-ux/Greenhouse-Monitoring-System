@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT Greenhouse Dashboard</title>
+<style>
+body {margin:0;font-family:Arial;background:#0f172a;color:#e2e8f0;}
+header {background:#020617;padding:20px;text-align:center;font-size:24px;font-weight:bold;}
+.container {display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:20px;}
+.card {background:#1e293b;padding:20px;border-radius:10px;text-align:center;}
+.value {font-size:28px;margin:10px 0;font-weight:bold;}
+input {width:80%;padding:8px;border-radius:5px;border:none;margin-top:8px;}
+.status {margin-top:8px;font-size:14px;}
+.ok{color:#22c55e}.warn{color:#facc15}.danger{color:#ef4444}
+footer {text-align:center;padding:15px;background:#020617;}
+</style>
+</head>
+
+<body>
+<header>IoT Greenhouse Monitoring Dashboard</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Temperature (°C)</h2>
+<div class="value" id="tempDisplay">25</div>
+<input type="number" id="tempInput" value="25" onchange="update('temp')">
+<div class="status" id="tempStatus"></div>
+</div>
+
+<div class="card">
+<h2>Humidity (%)</h2>
+<div class="value" id="humDisplay">60</div>
+<input type="number" id="humInput" value="60" onchange="update('hum')">
+<div class="status" id="humStatus"></div>
+</div>
+
+<div class="card">
+<h2>Soil Moisture (%)</h2>
+<div class="value" id="soilDisplay">50</div>
+<input type="number" id="soilInput" value="50" onchange="update('soil')">
+<div class="status" id="soilStatus"></div>
+</div>
+
+<div class="card">
+<h2>Light Intensity (lux)</h2>
+<div class="value" id="lightDisplay">300</div>
+<input type="number" id="lightInput" value="300" onchange="update('light')">
+<div class="status" id="lightStatus"></div>
+</div>
+
+</div>
+
+<footer>© 2026 IoT Greenhouse System</footer>
+
+<script>
+function update(type){
+ if(type==='temp'){
+   let v=document.getElementById('tempInput').value;
+   document.getElementById('tempDisplay').innerText=v;
+   setStatus('tempStatus', v<35?'Normal':(v<45?'Warning':'Too Hot'));
+ }
+ if(type==='hum'){
+   let v=document.getElementById('humInput').value;
+   document.getElementById('humDisplay').innerText=v;
+   setStatus('humStatus', v<70?'Good':'Too Humid');
+ }
+ if(type==='soil'){
+   let v=document.getElementById('soilInput').value;
+   document.getElementById('soilDisplay').innerText=v;
+   setStatus('soilStatus', v<30?'Dry':(v<70?'Optimal':'Too Wet'));
+ }
+ if(type==='light'){
+   let v=document.getElementById('lightInput').value;
+   document.getElementById('lightDisplay').innerText=v;
+   setStatus('lightStatus', v<200?'Low Light':(v<800?'Optimal':'Too Bright'));
+ }
+}
+
+function setStatus(id,text){
+ let el=document.getElementById(id);
+ el.innerText=text;
+ el.className='status '+(text==='Normal'||text==='Good'||text==='Optimal'?'ok':(text.includes('Too')||text==='Dry'?'danger':'warn'));
+}
+
+// initialize
+update('temp');
+update('hum');
+update('soil');
+update('light');
+</script>
+
+</body>
+</html>
